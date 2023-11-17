@@ -1,0 +1,41 @@
+﻿<Window x:Class="KissRadio.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KissRadio"
+        xmlns:viewmodel="clr-namespace:KissRadio.ViewModel"
+        d:DataContext="{d:DesignInstance Type=viewmodel:SongViewModel}"
+        mc:Ignorable="d"
+        Title="{Binding Title}" Height="640" Width="440" ResizeMode="CanMinimize" Background="Black" RenderOptions.BitmapScalingMode="Fant">
+
+
+    <Grid>
+        <!-- Přesunutí Image a MediaElement do samostatných stylů pro snížení duplicity -->
+        <Image Style="{StaticResource CommonImageStyle}"/>
+        
+        <Grid Margin="30" x:Name="grid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="180px"/>
+                <RowDefinition Height="190px"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+  
+            <Image Margin="10" Source="https://www.kiss.cz/data/download/Kiss_BeHappy.png"></Image>
+
+            <Image MouseLeftButtonDown="Play" Margin="10" Grid.Row="1" Source="{Binding PlayIcon}"></Image>
+
+            <ScrollBar Margin="0,0,0,60" Minimum="0" Maximum="1" Width="300" Value="{Binding Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Orientation="Horizontal" Grid.Row="2"/>
+
+            <MediaElement Name="mediaElement" Volume="{Binding Volume}" Source="https://stream.rcs.revma.com/asn0cmvb938uv" LoadedBehavior="Manual" MediaEnded="MediaElementMediaEnded" MediaFailed="MediaElementMediaEnded"/>
+
+            <!-- Použití stylu pro Label -->
+            <Label Grid.Row="3" Style="{StaticResource LabelStyle}" Content="{Binding Song.c_title}"/>
+            <Label Foreground="Red" Grid.Row="4" Style="{StaticResource LabelStyle}" Content="{Binding Song.c_artist}"/>
+        </Grid>
+    </Grid>
+</Window>
