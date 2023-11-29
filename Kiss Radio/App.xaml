@@ -7,7 +7,7 @@
         <!-- Společné styly -->
         <Style x:Key="LabelStyle" TargetType="Label">
             <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontSize" Value="24"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="Black"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>

@@ -1,4 +1,5 @@
-﻿using System.Windows.Media.Imaging;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Media.Imaging;
 
 namespace KissRadio.ViewModel
 {
@@ -8,13 +9,14 @@ namespace KissRadio.ViewModel
         private string? _title;
         private BitmapImage? _playicon;
         private double? _volume;
+        private ObservableCollection<ListSong?> _songs;
 
         public SongViewModel()
         {
             Song = new SongData();
             Volume = 0.5;
+            Songs = new ObservableCollection<ListSong?>();
         }
-
 
         /// <summary>
         /// Reprezentuje informace o aktuální písni, včetně umělce, názvu a dalších údajů.
@@ -45,5 +47,13 @@ namespace KissRadio.ViewModel
             get => _volume;
             set => SetProperty(ref _volume, value);
         }
+        public ObservableCollection<ListSong?> Songs
+        {
+            get => _songs;
+            set => SetProperty(ref _songs, value);
+        }
+
+        public BitmapImage LogoImg { get; set; }
+        public BitmapImage BackgroundImg { get; set; }
     }
 }

@@ -2,14 +2,29 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <RootNamespace>KissRadio</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <UseWindowsForms>False</UseWindowsForms>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="img\**" />
+    <EmbeddedResource Remove="img\**" />
+    <None Remove="img\**" />
+    <Page Remove="img\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="logo.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Notification.Wpf" Version="7.0.0.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,7 +32,7 @@
       <HintPath>..\..\..\Git\Class-ImageProcessing\1.0\ImageProces\bin\Release\ImageProces.dll</HintPath>
     </Reference>
     <Reference Include="JsonDownloader">
-      <HintPath>..\..\..\Git\Class-JsonDownloader\JsonDownloader\bin\Release\JsonDownloader.dll</HintPath>
+      <HintPath>..\..\Reported\Class\JsonDownloader\JsonDownloader\bin\Release\net5.0\JsonDownloader.dll</HintPath>
     </Reference>
   </ItemGroup>
 

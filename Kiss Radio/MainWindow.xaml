@@ -7,35 +7,120 @@
         xmlns:viewmodel="clr-namespace:KissRadio.ViewModel"
         d:DataContext="{d:DesignInstance Type=viewmodel:SongViewModel}"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="640" Width="440" ResizeMode="CanMinimize" Background="Black" RenderOptions.BitmapScalingMode="Fant">
+        Title="{Binding Title}" Height="640" Width="793" ResizeMode="CanMinimize" Background="DarkRed" RenderOptions.BitmapScalingMode="Fant">
+
+    <Window.Resources>
+        <Style x:Key="SliderThumbStyle" TargetType="Thumb">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Background" Value="Red"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Ellipse Fill="{TemplateBinding Background}" Stroke="White" StrokeThickness="5"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SliderButtonStyle" TargetType="RepeatButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RepeatButton">
+                        <Border Background="Transparent"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="VolumeSliderStyle" TargetType="{x:Type Slider}">
+            <Setter Property="TickPlacement" Value="BottomRight"/>
+            <Setter Property="TickFrequency" Value="0.1"/>
+            <Setter Property="Width" Value="300"/>
+            <Setter Property="Minimum" Value="0"/>
+            <Setter Property="Maximum" Value="1"/>
+            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Slider}">
+                        <Grid>
+                            <Track x:Name="PART_Track" Grid.Row="1">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Style="{StaticResource SliderButtonStyle}" Command="Slider.DecreaseLarge"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Style="{StaticResource SliderThumbStyle}"/>
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Style="{StaticResource SliderButtonStyle}" Command="Slider.IncreaseLarge"/>
+                                </Track.IncreaseRepeatButton>
+                            </Track>
+                            <TickBar x:Name="TopTick" SnapsToDevicePixels="True" Placement="Top" Fill="{TemplateBinding Foreground}" Height="4"/>
+                            <TickBar x:Name="BottomTick" SnapsToDevicePixels="True" Placement="Bottom" Fill="{TemplateBinding Foreground}" Height="4"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo Description="My Taskbar Sample" ProgressState="Normal" ProgressValue="0.5">
+            <TaskbarItemInfo.ThumbButtonInfos>
+                <ThumbButtonInfoCollection>
+                    <ThumbButtonInfo  x:Name="_ThumbnailPauseButton"
+                          ImageSource="{Binding PlayIcon}"
+                          DismissWhenClicked="False"
+                          Click="ThumbnailPauseButtonClick"/>
+                </ThumbButtonInfoCollection>
+            </TaskbarItemInfo.ThumbButtonInfos>
+        </TaskbarItemInfo>
+    </Window.TaskbarItemInfo>
+
+    <StackPanel Orientation="Horizontal">
+        <Grid Width="440">
+            <!-- Přesunutí Image a MediaElement do samostatných stylů pro snížení duplicity -->
+            <Image Source="{Binding BackgroundImg}" Style="{StaticResource CommonImageStyle}"/>
+
+            <Grid Margin="30" x:Name="grid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="180px"/>
+                    <RowDefinition Height="190px"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
 
-    <Grid>
-        <!-- Přesunutí Image a MediaElement do samostatných stylů pro snížení duplicity -->
-        <Image Style="{StaticResource CommonImageStyle}"/>
-        
-        <Grid Margin="30" x:Name="grid">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="180px"/>
-                <RowDefinition Height="190px"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+                <Image Margin="10" Source="{Binding LogoImg}"></Image>
 
-  
-            <Image Margin="10" Source="https://www.kiss.cz/data/download/Kiss_BeHappy.png"></Image>
+                <Image MouseLeftButtonDown="Play" Margin="10" Grid.Row="1" Source="{Binding PlayIcon}"/>
 
-            <Image MouseLeftButtonDown="Play" Margin="10" Grid.Row="1" Source="{Binding PlayIcon}"></Image>
+                <Label Background="Wheat" Foreground="Black" HorizontalContentAlignment="Center" FontSize="30" Grid.Row="2" Content="Hlasitost" Padding="0" Width="120"/>
+                <Slider Background="Wheat" Margin="0,0,0,1" Style="{StaticResource VolumeSliderStyle}" Value="{Binding Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3"/>
 
-            <ScrollBar Margin="0,0,0,60" Minimum="0" Maximum="1" Width="300" Value="{Binding Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Orientation="Horizontal" Grid.Row="2"/>
+                <MediaElement Name="mediaElement" Volume="{Binding Volume}" Source="https://stream.rcs.revma.com/asn0cmvb938uv" LoadedBehavior="Manual" MediaEnded="MediaElementMediaEnded" MediaFailed="MediaElementMediaEnded"/>
 
-            <MediaElement Name="mediaElement" Volume="{Binding Volume}" Source="https://stream.rcs.revma.com/asn0cmvb938uv" LoadedBehavior="Manual" MediaEnded="MediaElementMediaEnded" MediaFailed="MediaElementMediaEnded"/>
-
-            <!-- Použití stylu pro Label -->
-            <Label Grid.Row="3" Style="{StaticResource LabelStyle}" Content="{Binding Song.c_title}"/>
-            <Label Foreground="Red" Grid.Row="4" Style="{StaticResource LabelStyle}" Content="{Binding Song.c_artist}"/>
+                <!-- Použití stylu pro Label -->
+                <Label Grid.Row="4" Style="{StaticResource LabelStyle}" Content="{Binding Song.c_title}"/>
+                <Label Foreground="Red" Grid.Row="5" Style="{StaticResource LabelStyle}" Content="{Binding Song.c_artist}"/>
+            </Grid>
         </Grid>
-    </Grid>
+        <ListBox VerticalAlignment="Stretch" Padding="10" Background="DarkRed" Width="338" ItemsSource="{Binding Songs}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Width="286" Background="LightYellow" Margin="0,10,0,0">
+                        <TextBlock Foreground="DarkGreen" HorizontalAlignment="Center" FontSize="14" Text="{Binding DateTime, StringFormat='dd.MM.yyyy HH:mm:ss', ConverterCulture=cs-CZ}"/>
+                        <Viewbox StretchDirection="DownOnly">
+                            <TextBlock Foreground="MediumVioletRed" HorizontalAlignment="Center" FontSize="24" Text="{Binding c_artist}"/>
+                        </Viewbox>
+                        <Viewbox StretchDirection="DownOnly">
+                            <TextBlock HorizontalAlignment="Center" FontSize="20" Text="{Binding c_title}"/>
+                        </Viewbox>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </StackPanel>
 </Window>

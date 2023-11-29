@@ -1,4 +1,6 @@
-﻿namespace KissRadio
+﻿using System;
+
+namespace KissRadio
 {
     /// <summary>
     /// Interface reprezentující data o aktuálně hrané písni.
@@ -43,5 +45,12 @@
 
         /// <inheritdoc/>
         public object? from { get; set; }
+    }
+
+    public class ListSong
+    {
+        public string? c_title { get; set; }
+        public string? c_artist { get; set; }
+        public DateTime DateTime { get; set; }
     }
 }
